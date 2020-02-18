@@ -11,6 +11,7 @@ class puzzle:
         }
         self.target = self.create_target_puzzle(dim)
         self.start = self.create_start_puzzle(value_list, dim)
+        self.count_moves = 0
 
     def create_target_puzzle(self, dim):
         target_mat = np.zeros((dim, dim), dtype=int)
