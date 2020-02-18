@@ -10,6 +10,8 @@ class puzzle:
             "left_line": 0
         }
         self.target = self.create_target_puzzle(dim)
+        # self.target_list = self.target
+        self.target_list = self.target.flatten()
         self.start = self.create_start_puzzle(value_list, dim)
         self.count_moves = 0
         self.dim = dim
