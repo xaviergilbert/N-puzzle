@@ -1,3 +1,6 @@
+import math
+from puzzle_class import puzzle
+
 # 1 - concevoir la structure (class)
 # 2 - parser pour rentrer dans la matrice le puzzle de base
 # 3 - sortir le puzzle finis
@@ -39,3 +42,26 @@
 #           On met la tuile a
 #           On remet une tuile non triée au milieu
 #           On decale le premier cercle de 1 cran vers la gauche
+
+
+#A* algorithme
+# En gros on cherche le chemin le plus direct, si ca ne marche pas on va elargir vers un chemin un peu moins direct, etc...
+# f = g + h 
+# f is total cost of the node
+# g is the distance between the current node and the start node
+# h is the heuristic - estimated distance from the current node to the end node
+
+def main():
+    # value_list = parsing()
+    value_list = [1, 5, 0, 2, 3, 4, 6, 7, 8]
+    mon_puzzle = puzzle(value_list, int(math.sqrt(len(value_list))))
+    print("\npuzzle target : \n", mon_puzzle.target)
+    print("\npuzzle start : \n", mon_puzzle.start)
+    exit(0)
+
+if __name__ == "__main__":
+    main()
+
+# 1 2 3
+# 4 5 6
+# 7 8 0
