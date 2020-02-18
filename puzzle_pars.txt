@@ -1,0 +1,6 @@
+# This puzzle is solvable
+4
+ 4  5 10  9# paf
+ 8  1 15  2 
+13 14  6  7 
+ 0 12  3 11 
