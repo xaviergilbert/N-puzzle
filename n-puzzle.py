@@ -1,5 +1,9 @@
 import math
+import numpy as np
+from parsing import parsing
 from puzzle_class import puzzle
+from check_solvable import check_solvable
+
 
 # 1 - concevoir la structure (class)
 # 2 - parser pour rentrer dans la matrice le puzzle de base
@@ -52,9 +56,10 @@ from puzzle_class import puzzle
 # h is the heuristic - estimated distance from the current node to the end node
 
 def main():
-    # value_list = parsing()
-    value_list = [1, 5, 0, 2, 3, 4, 6, 7, 8]
-    mon_puzzle = puzzle(value_list, int(math.sqrt(len(value_list))))
+    value_list = parsing()
+    dimension = int(math.sqrt(len(value_list)))
+    mon_puzzle = puzzle(value_list, dimension)
+    check_solvable(mon_puzzle, value_list)
     print("\npuzzle target : \n", mon_puzzle.target)
     print("\npuzzle start : \n", mon_puzzle.start)
     exit(0)
