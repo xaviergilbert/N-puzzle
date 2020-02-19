@@ -11,7 +11,7 @@ class puzzle:
         }
         self.target = self.create_target_puzzle(dim)
         # self.target_list = self.target
-        self.target_list = self.target.flatten()
+        # self.target_list = self.target.flatten()
         self.start = self.create_start_puzzle(value_list, dim)
         self.count_moves = 0
         self.dim = dim
@@ -60,6 +60,22 @@ class puzzle:
             y +=1
         return start_mat
 
+# class puzzle_state:
+
+
+
+# class node:
+#     def __init__(self):
+#         self.state = "closed"
+#         self.parent_node = None
+#         self.cost = None
+#         self.distance_init = None
+#         self.distance_target = None
+    
+#     def compute_cost(self):
+#         self.cost = self.distance_init + self.distance_target
+
+#     def compute_distance_init(self, )
 
 def main():
     mon_puzzle = puzzle(4)
@@ -68,16 +84,9 @@ if __name__ == "__main__":
     main()
 
 
-# 123
-# 804
-# 765
-
-# 1  2  3  4
-# 12 13 14 5
-# 11 0 15  6
-# 10 9  8  7
-
-# 0 0 0 0
-# 0 0 0 0
-# 0 0 0 0
-# 0 0 0 0
+# Node:
+#     - open / close 
+#     - parent Node
+#     - f is total cost of the node
+#     - g is the distance between the current node and the start node
+#     - h is the heuristic - estimated distance from the current node to the end node

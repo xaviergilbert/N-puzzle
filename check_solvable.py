@@ -10,7 +10,6 @@ def ft_count_inversion(liste):
     return (inv_count)
 
 def check_solvable(puzzle, liste):
-    # liste = [12, 1, 10, 2, 7, 11, 4, 14, 5, 0, 9, 15, 8, 13, 6, 3]
     count_inversion_init = ft_count_inversion(liste)
     count_inversion_target = ft_count_inversion(puzzle.target.flatten())
     if puzzle.dim % 2 != 0 and (count_inversion_init % 2 != count_inversion_target % 2):

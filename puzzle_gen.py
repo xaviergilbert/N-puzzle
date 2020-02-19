@@ -21,17 +21,14 @@ def make_puzzle(s, solvable, iterations):
         p[swi] = 0
 
     p = make_goal(s)
-    # print("puzzle make puzzle", p)
     for i in range(iterations):
         swap_empty(p)
-    # print("puzzle after swap empty", p)
 
     if not solvable:
         if p[0] == 0 or p[1] == 0:
             p[-1], p[-2] = p[-2], p[-1]
         else:
             p[0], p[1] = p[1], p[0]
-    # print("puzzle make unsolvable", p)
     
 
     return p
