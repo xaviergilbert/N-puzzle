@@ -1,5 +1,7 @@
 import math
+
 import numpy as np
+
 from parsing import parsing
 from puzzle_class import puzzle
 from check_solvable import check_solvable
@@ -265,3 +267,89 @@ if __name__ == "__main__":
 
 # #35
 # PAS RENTABLE
+                                                            
+#                         12 13 14      
+#                         9 1 0 3
+#                         4 6 8 11
+#                         7 2 5 10
+
+
+
+
+
+# 2 possibilitees 11 en haut gauche
+
+# cas      1                            2
+#
+#      12 13 14 15               12 13 14 15
+#      9 1 0 3                    9 1 0 3
+#      4 6 8 11                   4 6 8 11
+#      7 2 5 10                   7 2 5 10
+
+# coups  2                             2
+#      12 13 14 15                12 13 14  15    
+#      9 1 8 3                    9 1 3 11
+#      4 6 11 0                   4 6 8 0    
+#      7 2 5 10                   7 2 5 10
+
+
+
+# coups  5                            5
+#      12 13 14 15                 12 13 14 15
+#      9 1 11 8                    9 1 11 0
+#      4 6 0 3                     4 6 3 8    
+#      7 2 5 10                    7 2 5 10
+
+# coups  8                           8
+#      12 13 14 15                 12 13 11 14
+#      9 11 0 8                    9 1 0 15
+#      4 1 6 3                     4 6 3 8    
+#      7 2 5 10                    7 2 5 10
+
+
+# coups  11                           11
+#      12 11 13 15                 12 11 0 14
+#      9 0 14 8                    9 13 1 15
+#      4 1 6 3                     4 6 3 8    
+#      7 2 5 10                    7 2 5 10
+
+
+# coups  14                           16
+#      11 0 13 15                 11 0 1 14
+#      12 9 14 8                  12 9 13 15
+#      4 1 6 3                    4 6 3 8    
+#      7 2 5 10                   7 2 5 10
+
+
+# to a_star :
+# etat final (class n puzzle) etat courant (algo.py) et heuristic (algo.py)
+
+# class algo
+# => while RESOLUTION ( etat_courant != etat_final)
+
+
+# seek nombre a bouger
+# to target
+
+# ==> a_star (recherche meilleur chemin et le renvois)
+
+
+
+# => deplacement (via chemin recu) par a*
+
+
+
+
+
+
+
+# test (pour compter en bonus: resolveur en fonction str + affichage bonus (+ dire si il est bon))
+# 2eme fonction (pour nous et bonus)
+# retour final ("top down ")
+
+
+# => via str de retour : change le puzzle initial en fonction de la chaine str
+
+
+
+
