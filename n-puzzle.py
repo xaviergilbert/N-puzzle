@@ -1,10 +1,9 @@
 import math
-
 import numpy as np
-
 from parsing import parsing
 from puzzle_class import puzzle
 from check_solvable import check_solvable
+from algo import *
 
 
 # 1 - concevoir la structure (class)
@@ -78,6 +77,7 @@ def main():
     check_solvable(mon_puzzle, value_list)
     print("\npuzzle target : \n", mon_puzzle.target)
     print("\npuzzle start : \n", mon_puzzle.start)
+    resolution = algorithme(mon_puzzle, "m") #heuristic a changer
     exit(0)
 
 if __name__ == "__main__":
