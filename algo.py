@@ -2,6 +2,8 @@ import sys
 import math
 from moves import *
 import numpy as np
+import copy
+
 
 #finir fonction vacante + relire le code du debut 
 
@@ -14,7 +16,7 @@ class node:
         print("on test la valeur :", old_current_state[nb])
         print("ETAT SANS MOVES\n", old_current_state)
         if (parent_node != None):
-            print("identique a au dessus :\n", parent_node.current_state)
+            print("meme adresse partout\n", parent_node)
         self.heuristic = heuristic
         self.pos_zero = format_where(np.where(old_current_state == 0))
         self.nb = nb # coordonnee reformatee
@@ -31,31 +33,39 @@ class node:
 
 
     def moving_nb_to_dest(self, old_current_state, dest):
-        if self.pos_zero[0] > dest[0]:
+        print("KK", old_current_state[self.pos_zero[0] - 1][self.pos_zero[1]])
+        print("JJ", old_current_state[self.nb])
+
+        if self.pos_zero[0] > dest[0] and old_current_state[self.pos_zero[0] - 1][self.pos_zero[1]] != old_current_state[self.nb]:
             old_current_state = move_top(old_current_state, self.pos_zero)
             self.zero_moves += "1"
-        elif self.pos_zero[0] < dest[0]:
+        elif self.pos_zero[0] < dest[0] and old_current_state[self.pos_zero[0] + 1][self.pos_zero[1]] != old_current_state[self.nb]:
             old_current_state = move_bottom(old_current_state, self.pos_zero)
             self.zero_moves += "2"
-        elif self.pos_zero[1] < dest[1]:
+        elif self.pos_zero[1] < dest[1] and old_current_state[self.pos_zero[0]][self.pos_zero[1] + 1] != old_current_state[self.nb]:
             old_current_state = move_right(old_current_state, self.pos_zero)
             self.zero_moves += "3"
-        elif self.pos_zero[1] > dest[1]:
+        elif self.pos_zero[1] > dest[1] and old_current_state[self.pos_zero[0]][self.pos_zero[1] - 1] != old_current_state[self.nb]:
             old_current_state = move_left(old_current_state, self.pos_zero)
             self.zero_moves += "4"
+        else:
+            return False
         return old_current_state
 
     def new_current(self, old_current_state, dest): # ramene 0 sur nb qu on est entrain de tester A OPTIMISER cette fonction c'est du troll pck il pete tout
         dist = 1
-
+        tmp = copy.deepcopy(old_current_state)
         while dist != 0:
-            old_current_state = self.moving_nb_to_dest(old_current_state, dest)
-            self.pos_zero = format_where(np.where(old_current_state == 0))
+            tmp = self.moving_nb_to_dest(tmp, dest)
+            if type(tmp) == bool:
+                print("regarder ici car probleme de mouvement")
+                return False
+            self.pos_zero = format_where(np.where(tmp == 0))
             dist = abs(self.pos_zero[0] - dest[0]) + abs(self.pos_zero[1] - dest[1])
             
-        old_current_state = self.moving_nb_to_dest(old_current_state, self.nb) #swap final
+        tmp = self.moving_nb_to_dest(tmp, self.nb) #swap final
         # self.pos_zero = format_where(np.where(old_current_state == 0))
-        return old_current_state
+        return tmp
 
 
     def calcul_heuristic(self, dest): # + real dist   # f = g + h
@@ -89,14 +99,13 @@ class algorithme:
         return lst
 
     def to_opened(self, lst_coord_new_node, parent_node, dest): # rentre les nouveaux noeud dans la liste open
-        print("le parent node",parent_node.nb)
         for coord in lst_coord_new_node: # NE PAS RENTRER TOUT LES NODES ? + TRIER
-            self.opened.append(node(coord, dest, parent_node.current_state, parent_node, self.heuristic))
-        print("le parent node",parent_node.nb)
-
-        print(self.opened[2].nb)
+            tmp = node(coord, dest, parent_node.current_state, parent_node, self.heuristic)
+            if tmp.current_state != 0:
+                self.opened.append(tmp)
+        exit()
         self.opened = sorted(self.opened, key=lambda node: node.count_zero_moves)
-        print(self.opened[2].nb)
+
         exit()
         
 
