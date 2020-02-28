@@ -1,8 +1,13 @@
 import time
-from src.parsing import *
+import math
+import numpy as np
+from src.parsing import parsing
 from src.puzzle_class import puzzle
 from src.check_solvable import check_solvable
-from src.algo import *
+from src.algo import algorithme
+from src.node_class import node, format_where
+from src.moves import *
+
 
 def heuristic_choice():
     """ Allow to select the user chosen heuristic with his input """
