@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+import math
 from src.moves import *
 
 def format_where(ret):
@@ -41,8 +42,18 @@ class node:
 
     def calcul_heuristic(self, current, final):
         """ Calculate the cost of a path choice base on heuristique and number of moves already done """
-        if self.heuristic == "plouf": # a changer
-            return
+
+        if self.heuristic == "euclide": # a changer
+            """" Distance d’Euclide : La distance d’Euclide est égale à la racine carré de la somme des
+                distances au carré entre chaque pion et sa position finale. 
+            """
+            dist = 0
+            for nb in np.nditer(current):
+                tmp1, tmp2 = format_where(np.where(final == nb)) , format_where(np.where(current == nb))
+                dist += (abs(tmp1[0] - tmp2[0]) + abs(tmp1[1] - tmp2[1])) ** 2
+            euclide = math.sqrt(dist)
+            return euclide + len(self.zero_moves)
+
         elif self.heuristic == "misplaced_tiles":
             misplaced_tiles = 0
             for nb in np.nditer(current):
@@ -50,6 +61,7 @@ class node:
                 if tmp1[0] != tmp2[0] or tmp1[1] != tmp2[1]:
                     misplaced_tiles += 1
             return misplaced_tiles + len(self.zero_moves)
+
         elif self.heuristic == "manhattan":
             dist = 0
             for nb in np.nditer(current):

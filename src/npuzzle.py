@@ -14,12 +14,12 @@ def heuristic_choice():
     print("\nChoose an heuristic :")
     print("1 : Manhattan heuristic")
     print("2 : Misplaced tiles")
-    print("3 : An other heuristique")
+    print("3 : Euclide heuristic")
     choice = input("Your choice : ")
     if choice == "2":
         return "misplaced_tiles"
     elif choice == "3":
-        return ""
+        return "euclide"
     else:
         return "manhattan"
 

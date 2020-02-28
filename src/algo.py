@@ -75,9 +75,9 @@ class algorithme:
         i = 1
         while (len(self.closed) == 0 or not np.array_equal(self.closed[-1].current_state , puzzle.target)):
             if int(time.time() - puzzle.start_time) / 5 == i:
-                if i > 11:
+                if i > 22:
                     print("Puzzle seems too long to resolve - ENDING PROGRAM (>", int(time.time() - puzzle.start_time), " seconds)")
-                    exit()
+                    break
                 print("Resolving puzzle, please wait... (", int(time.time() - puzzle.start_time), "seconds )")
                 i += 1
 
