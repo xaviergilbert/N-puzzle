@@ -3,6 +3,7 @@ import math
 from moves import *
 import numpy as np
 import copy
+import time #pour test xavier le noob qui triche
 
 #record brute force 22 coups
 #record xavier 24 coups
@@ -70,8 +71,8 @@ class node:
             for nb in np.nditer(current):
                 tmp1, tmp2 = format_where(np.where(final == nb)) , format_where(np.where(current == nb))
                 dist += abs(tmp1[0] - tmp2[0]) + abs(tmp1[1] - tmp2[1])
-            dist = format_where(np.where(final == self.current_state[self.nb]))
-            dist = abs(self.nb[0] - dist[0]) + abs(self.nb[1] - dist[1])
+            # dist = format_where(np.where(final == self.current_state[self.nb]))
+            # dist = abs(self.nb[0] - dist[0]) + abs(self.nb[1] - dist[1])
 
         # print("heuristic",dist)
         # print("resultat cost", dist + len(self.zero_moves))
@@ -108,48 +109,68 @@ class algorithme:
         for coord in lst_coord_new_node: # NE PAS RENTRER TOUT LES NODES ? + TRIER
             flag = 2
             tmp = node(final_state, parent_node.current_state, parent_node, coord, self.heuristic)
+
+            # i = 1
+            # index = 1 # pour pas virer self.open[0]
+
+            # while i < len(self.opened):
+            #     if np.array_equal(self.opened[i].current_state, tmp.current_state):
+            #         if self.opened[i].cost_value < tmp.cost_value:
+            #             flag = 0
+            #         else:
+            #             del self.opened[i]
+            #             # i -= 1
+            #             # index -=1
+            #             flag = 1
+            #     if tmp.cost_value < self.opened[i].cost_value:
+            #         index = i
+            #     i += 1
+
+
             i = 0
             for elem in self.opened:
                 if np.array_equal(elem.current_state, tmp.current_state):
                     if elem.cost_value < tmp.cost_value:
                         flag = 0
                     else:
-                        print(len(self.opened))
                         self.opened.remove(elem)
-                        print(len(self.opened))
                         flag = 1
-                    # self.opened.remove(elem)
-                    flag = 1
+
             if flag != 1 and len(self.closed) > 0:
                 for elem in self.closed:
                     if np.array_equal(elem.current_state, tmp.current_state):
-                        flag = 0 #remetre 0
+                        print("ON PASSE ICI")
+                        flag = 0 
                         if elem.cost_value > tmp.cost_value:
                             print("le cas casse couille arrive, il faut dont surement supprimer tout les enfants de l elem qui sont dans open - WARNING (dans algo.py fonction to_opened)")
-                            exit()
-            i = 0
+                            # exit()
+            
+
+
+            i = 1 # pour pas virer self.open[0]
             while i < len(self.opened) and tmp.cost_value > self.opened[i].cost_value:
                 i += 1
+            # if i > math.exp(self.dim) / self.dim:
+            #     # print("KKKKKKKKKKKKKK")
+            #     # time.sleep(0.5)
+
+                # flag = 0
+
             if flag > 0:
-                tmp_un = len(self.opened)
                 self.opened.insert(i, tmp)
-                tmp_deux = len(self.opened)
-                if (tmp_deux == tmp_un):
-                    exit()
 
     def a_star(self, puzzle):
         self.opened = [node(puzzle.target, puzzle.start, None, format_where(np.where(puzzle.start == 0)), self.heuristic)] 
         self.closed = []
         i = 0
         while (len(self.closed) == 0 or not np.array_equal(self.closed[-1].current_state , puzzle.target)):
-            if i == 2000:
+            if i == 20000:
                 break
-            # print(i)
-            i += 1
             print(i)
+            i += 1
+            # print(i)
             tmp_nodes = self.find_node(self.opened[0]) # les differents noeuds autour du noeud en cours + pas mettre noeud en cours dans opened or closed (list de coordonnées)
             self.to_opened(puzzle.target, tmp_nodes, self.opened[0]) # append node in opened list () + tri list + changer ETAT pour chaque noeud
-# + interchangement
 # + cas particulier relou de xavier le noob
             # print(self.opened[0].current_state)
             self.closed.append(self.opened[0])
@@ -180,19 +201,19 @@ class algorithme:
         #     for tmp in self.opened:
         #         if np.array_equal(noeud.current_state , tmp.current_state):
         #             del tmp
-        i = 0
-        len_open = len(self.opened)
 
-        while i < len_open:
-            j = i + 1
-            while j < len_open:
-                if np.array_equal(self.opened[i].current_state , self.opened[j].current_state):
-                    del self.opened[j]
-                    print("\nDEL ELEMENT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
-                    len_open -= 1
-                    j -= 1
-                j += 1
-            i += 1
+        # i = 0
+        # len_open = len(self.opened)
+        # while i < len_open:
+        #     j = i + 1
+        #     while j < len_open:
+        #         if np.array_equal(self.opened[i].current_state , self.opened[j].current_state):
+        #             del self.opened[j]
+        #             print("\nDEL ELEMENT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n")
+        #             len_open -= 1
+        #             j -= 1
+        #         j += 1
+        #     i += 1
 
         print("nb chemin apres les memes", len(self.opened))
         

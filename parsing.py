@@ -40,8 +40,9 @@ def insert_int_tab(tab_string):
     return (final_tab)
 
 def check_int_puzzle_error(tab_int):
-    if (min(tab_int) != 0 and max(tab_int) != len(tab_int)) or len(np.unique(tab_int)) != len(tab_int):
+    if min(tab_int) != 0 or max(tab_int) + 1 != len(tab_int) or len(np.unique(tab_int)) != len(tab_int):
         print(Fore.RED, "ERROR in file :", sys.argv[1], ", bad value for puzzle")
+        exit()
 
 def parsing():
     open_file= open(sys.argv[1], 'r')
