@@ -1,74 +1,55 @@
-import math
-import numpy as np
+import time
 from parsing import parsing
 from puzzle_class import puzzle
 from check_solvable import check_solvable
 from algo import *
 
+def heuristic_choice():
+    """ Allow to select the user chosen heuristic with his input """
+    print("Choose an heuristic :")
+    print("1 : Manhattan heuristic")
+    print("2 : Misplaced tiles")
+    print("3 : An other heuristique")
+    choice = input("Your choice :")
+    if choice == "2":
+        return "misplaced_tiles"
+    elif choice == "3":
+        return ""
+    else:
+        return "manhattan"
 
-# 1 - concevoir la structure (class)
-# 2 - parser pour rentrer dans la matrice le puzzle de base
-# 3 - sortir le puzzle finis
-# FORMAT D'ENTREE
-# # this is a comment$
-# 3$
-# 3 2 6 #another comment$
-# 1 4 0$
-# 8 7 5$
-# zaz@blackjack:~/npuzzle/$ cat -e npuzzle-4-1.txt
-# # PONIES$
-# 4$
-# 0 10 5 7$
-# 11 14 4 8$
-# 1 2 6 13$
-# 12 3 15 9$
-# zaz@blackjack:~/npuzzle/$ cat -e npuzzle-4-1.txt
-# # Puzzles can be aligned, or NOT. whatever. accept both.$
-# 4$
-# 0 10 5 7$
-# 11 14 4 8$
-# 1 2 6 13$
-# 12 3 15 9$
+def print_info(algo):
+    """ Print information about puzzle solving """
+    # print etats etape par etape
+    tmp = algo.closed[-1]
+    i = 0
+    while tmp.parent_node != None:
+        state_number = len(algo.path) - i
+        print("Etat ", state_number, "\n", tmp.current_state, "\n")
+        tmp = tmp.parent_node
+        i += 1
 
+    # print other info 
+    print("Complexity in time : ", algo.nb_states)
+    print("Complexity in space : ", algo.max_nb_state)
+    print("Number of moves : ", len(algo.path))
+    print("Time to resolve :", str(algo.resolve_time)[:5], "seconds")
 
-#RESOLUTION PUZZLE 3*3
-#1
-# On met le 1 en haut a gauche
-#Tant que puzzle.state != puzzle.objectif
-#1.5 On met la tuile que l'on veut placer au milieu
-#2 Si l'endroit ou on veut mettre la tuile n'est pas un coin
-#       On trouve le chemin le plus rapide pour mettre la tuile a cote de l'emplacement désiré
-#       On libère l'emplacement désiré et on met la tuile voulu
-#3 Sinon 
-#       Si la tuile est un chiffre impair et 3 coins sont des chiffres impairs
-#           Puzzle insolvable
-#       Sinon
-#           On decale le premier cercle de 1 cran vers la droite
-#           On met la tuile a
-#           On remet une tuile non triée au milieu
-#           On decale le premier cercle de 1 cran vers la gauche
-
-
-#A* algorithme
-# En gros on cherche le chemin le plus direct, si ca ne marche pas on va elargir vers un chemin un peu moins direct, etc...
-# f = g + h 
-# f is total cost of the node
-# g is the distance between the current node and the start node
-# h is the heuristic - estimated distance from the current node to the end node
-#sommet -> piece
-#arrete -> direction possible (haut bas droite gauche)
-# Une heuristique est une preidction de coup qui reste a payé entre un noeud (current) et le noeuds a atteindre. On connait pas le chemin optimal
-#donc c'est une prediction qui va permettre d'influencer la recherche en pointant vers des chemins plus prometteurs.
-#open : liste qui contient les noeuds qui ont pas encore etes traites.
-#closed : liste qui contient les noeuds deja traites.
-#les noeuds n dans open sont triés par ordre croissant selon leur valeur f = g + h
-#A chaque iteration de A* on va donc selectionner le noeud le plus prometteur (le premier)
-
-#exemples d'heuristique :
-#   Manhattan-distance heuristic:
-#       d(A,B)= |X(b) - X(a)| + |Y(b) - Y(a)| distance de a à b -> difference abscisse (valeur abs) + difference ordonnée
-#   nombre de cases mal placées :
-#       ce qui va nous données au moins nombre de cases mal placées déplacaements pour optenir la configuration finale
+def ft_verif(base, target, string):
+    """ Function which check if the initial puzzle leads to final puzzle move by move"""
+    for c in string:
+        if c == 't':
+            base = move_top(base, format_where(np.where(base == 0)))
+        if c == 'd':
+            base = move_bottom(base, format_where(np.where(base == 0)))
+        if c == 'r':
+            base = move_right(base, format_where(np.where(base == 0))) 
+        if c == 'l':
+            base = move_left(base, format_where(np.where(base == 0)))
+    if np.array_equal(base, target):
+        print("Check done - Path correct")
+    else:
+        print("Check done - Path Incorerrect")
 
 def main():
     value_list = parsing()
@@ -77,7 +58,12 @@ def main():
     check_solvable(mon_puzzle, value_list)
     print("\npuzzle target : \n", mon_puzzle.target)
     print("\npuzzle start : \n", mon_puzzle.start)
-    resolution = algorithme(mon_puzzle, "m") #heuristic a changer
+    heuristic = heuristic_choice()
+    mon_puzzle.start_time = time.time()
+    algo = algorithme(mon_puzzle, heuristic) #heuristic a changer
+    mon_puzzle.end_time = time.time()
+    ft_verif(mon_puzzle.start, mon_puzzle.target, algo.path)
+    print_info(algo, )
     exit(0)
 
 if __name__ == "__main__":
