@@ -21,6 +21,7 @@ class node:
         else:
             self.zero_moves = copy.copy(parent_node.zero_moves)
             self.current_state = self.moving_nb_to_dest(format_where(np.where(parent_node.current_state == 0)), parent_node.current_state, self.nb)
+        self.hash = self.current_state.tobytes()
         self.cost_value = self.calcul_heuristic(self.current_state, final_state)
 
     def moving_nb_to_dest(self, pos_zero, old_current_state, dest): # a reprendre (fera 1 seul swap)
@@ -43,14 +44,14 @@ class node:
     def calcul_heuristic(self, current, final):
         """ Calculate the cost of a path choice base on heuristique and number of moves already done """
 
-        if self.heuristic == "euclide": # a changer
+        if self.heuristic == "euclide": 
             """" Distance d’Euclide : La distance d’Euclide est égale à la racine carré de la somme des
                 distances au carré entre chaque pion et sa position finale. 
             """
             dist = 0
             for nb in np.nditer(current):
                 tmp1, tmp2 = format_where(np.where(final == nb)) , format_where(np.where(current == nb))
-                dist += (abs(tmp1[0] - tmp2[0]) + abs(tmp1[1] - tmp2[1])) ** 2
+                dist += ((abs(tmp1[0] - tmp2[0]) + abs(tmp1[1] - tmp2[1])) ** 2)
             euclide = math.sqrt(dist)
             return euclide + len(self.zero_moves)
 

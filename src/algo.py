@@ -3,7 +3,6 @@ import math
 import numpy as np
 import copy
 import time
-from src.moves import *
 from src.node_class import node, format_where
 
 #record brute force 22 coups
@@ -43,7 +42,8 @@ class algorithme:
             tmp = node(final_state, parent_node.current_state, parent_node, coord, self.heuristic)
 
             for elem in self.opened:
-                if np.array_equal(elem.current_state, tmp.current_state):
+                # if np.array_equal(elem.current_state, tmp.current_state):
+                if elem.hash == tmp.hash:
                     if elem.cost_value < tmp.cost_value:
                         flag = 0
                     else:
@@ -52,7 +52,8 @@ class algorithme:
 
             if flag != 1 and len(self.closed) > 0:
                 for elem in self.closed:
-                    if np.array_equal(elem.current_state, tmp.current_state):
+                    # if np.array_equal(elem.current_state, tmp.current_state):
+                    if elem.hash == tmp.hash:
                         # print("ON PASSE ICI")
                         flag = 0 
                         if elem.cost_value > tmp.cost_value:
@@ -61,7 +62,7 @@ class algorithme:
                             pass
             
             i = 1 # pour pas virer self.open[0]
-            while i < len(self.opened) and tmp.cost_value > self.opened[i].cost_value:
+            while i < len(self.opened) and tmp.cost_value > self.opened[i].cost_value: # a mettre ad on parcours la liste
                 i += 1
 
             if flag > 0:
