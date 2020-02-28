@@ -76,8 +76,9 @@ class algorithme:
         while (len(self.closed) == 0 or not np.array_equal(self.closed[-1].current_state , puzzle.target)):
             if int(time.time() - puzzle.start_time) / 5 == i:
                 if i > 11:
-                    print("Puzzle seems too long to resolve - ENDING PROGRAM (>", str(time.time() - puzzle.start_time)[:1], " seconds )")
-                print("Resolving puzzle, please wait... (", str(time.time() - puzzle.start_time)[:1], "seconds )")
+                    print("Puzzle seems too long to resolve - ENDING PROGRAM (>", int(time.time() - puzzle.start_time), " seconds)")
+                    exit()
+                print("Resolving puzzle, please wait... (", int(time.time() - puzzle.start_time), "seconds )")
                 i += 1
 
             tmp_nodes = self.find_node(self.opened[0]) # les differents noeuds autour du noeud en cours + pas mettre noeud en cours dans opened or closed (list de coordonnées)

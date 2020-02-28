@@ -10,7 +10,7 @@ def heuristic_choice():
     print("1 : Manhattan heuristic")
     print("2 : Misplaced tiles")
     print("3 : An other heuristique")
-    choice = input("Your choice :")
+    choice = input("Your choice : ")
     if choice == "2":
         return "misplaced_tiles"
     elif choice == "3":
