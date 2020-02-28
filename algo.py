@@ -53,11 +53,12 @@ class algorithme:
             if flag != 1 and len(self.closed) > 0:
                 for elem in self.closed:
                     if np.array_equal(elem.current_state, tmp.current_state):
-                        print("ON PASSE ICI")
+                        # print("ON PASSE ICI")
                         flag = 0 
                         if elem.cost_value > tmp.cost_value:
-                            print("le cas casse couille arrive, il faut dont surement supprimer tout les enfants de l elem qui sont dans open - WARNING (dans algo.py fonction to_opened)")
+                            # print("le cas casse couille arrive, il faut dont surement supprimer tout les enfants de l elem qui sont dans open - WARNING (dans algo.py fonction to_opened)")
                             # exit()
+                            pass
             
             i = 1 # pour pas virer self.open[0]
             while i < len(self.opened) and tmp.cost_value > self.opened[i].cost_value:
@@ -71,10 +72,13 @@ class algorithme:
         self.opened = [node(puzzle.target, puzzle.start, None, format_where(np.where(puzzle.start == 0)), self.heuristic)] 
         self.closed = []
 
+        i = 1
         while (len(self.closed) == 0 or not np.array_equal(self.closed[-1].current_state , puzzle.target)):
-
-            if time.time() - puzzle.start_time > 10:
-                break
+            if int(time.time() - puzzle.start_time) / 5 == i:
+                if i > 11:
+                    print("Puzzle seems too long to resolve - ENDING PROGRAM (>", str(time.time() - puzzle.start_time)[:1], " seconds )")
+                print("Resolving puzzle, please wait... (", str(time.time() - puzzle.start_time)[:1], "seconds )")
+                i += 1
 
             tmp_nodes = self.find_node(self.opened[0]) # les differents noeuds autour du noeud en cours + pas mettre noeud en cours dans opened or closed (list de coordonnées)
             self.to_opened(puzzle.target, tmp_nodes, self.opened[0]) # append node in opened list () + tri list + changer ETAT pour chaque noeud
