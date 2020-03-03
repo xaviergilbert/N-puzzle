@@ -14,6 +14,45 @@ class plouf:
 
 
 if __name__ == "__main__":
+
+    # # test rapidite parcourir np.array ou parcourir double list
+    # tmp = []
+    # tmp2 = []
+    # i  = 0
+    # while i < 16:
+    #     if i != 0 and i % 4 == 0:
+    #         print("ici")
+    #         tmp.append(tmp2)
+    #         tmp2 = []
+    #             # del tmp2
+    #     print(i)
+    #     tmp2.append(i)
+    #     # print("ici", tmp2)
+    #     i += 1
+    # tmp.append(tmp2)
+    # # double liste
+    # i = 0
+    # while i < 100000:
+    #     for nb in tmp:
+    #         for nombre in nb:
+    #             # print(nombre)
+    #             # time.sleep(1)
+    #             pass
+    #     i += 1
+    # # np array
+    # # tmp = np.array(tmp)
+    # # i = 0
+    # # while i < 100000:
+    # #     for nb in np.nditer(tmp):
+    # #         # print(nb)
+    # #         # print(nombre)
+    # #         # time.sleep(1)
+    # #         pass
+    # #     i += 1
+    # print(tmp)
+    # exit()
+
+
     # i = 0
     # lst = []
     # while i < 100000:

@@ -9,10 +9,9 @@ class puzzle:
             "bot_line": 0,
             "left_line": 0
         }
-        self.target = self.create_target_puzzle(dim)
-        # self.target_list = self.target
-        # self.target_list = self.target.flatten()
-        self.start = self.create_start_puzzle(value_list, dim)
+        self.weight_heuristique = 1
+        self.weight_djikstra = 1
+        self.time_limit = 0
         self.start_time = 0
         self.end_time = 0
         self.dim = dim
@@ -46,7 +45,7 @@ class puzzle:
                     chiffre += 1
                     index += 1
                 self.fill_line["left_line"] += 1
-        return target_mat
+        self.target = target_mat
 
     def create_start_puzzle(self, value_list, dim):
         start_mat = np.zeros((dim, dim), dtype=int)
@@ -59,35 +58,14 @@ class puzzle:
                 index += 1
                 x += 1
             y +=1
-        return start_mat
-
-# class puzzle_state:
-
-
-
-# class node:
-#     def __init__(self):
-#         self.state = "closed"
-#         self.parent_node = None
-#         self.cost = None
-#         self.distance_init = None
-#         self.distance_target = None
+        self.start = start_mat
     
-#     def compute_cost(self):
-#         self.cost = self.distance_init + self.distance_target
+    def hash_target(self):
+        self.hash = self.target.tobytes()        
 
-#     def compute_distance_init(self, )
 
 def main():
     mon_puzzle = puzzle(4)
 
 if __name__ == "__main__":
     main()
-
-
-# Node:
-#     - open / close 
-#     - parent Node
-#     - f is total cost of the node
-#     - g is the distance between the current node and the start node
-#     - h is the heuristic - estimated distance from the current node to the end node
