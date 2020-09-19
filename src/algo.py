@@ -21,14 +21,14 @@ class algorithme:
     def find_node(self, node):
         """ Find neighbours nodes but the parent one """
         lst = []
-        if node.old_nb[0] + 1 <= self.dim - 1 and (node.parent_node == None or node.old_nb[0] + 1 != node.nb[0]):
-            lst.append((node.old_nb[0] + 1, node.old_nb[1]))
-        if node.old_nb[0] - 1 >= 0 and (node.parent_node == None or node.old_nb[0] -1 != node.nb[0]):
-            lst.append((node.old_nb[0] - 1, node.old_nb[1]))
-        if node.old_nb[1] + 1 <= self.dim - 1 and (node.parent_node == None or node.old_nb[1] + 1 != node.nb[1]):
-            lst.append((node.old_nb[0], node.old_nb[1] + 1))
-        if node.old_nb[1] - 1 >= 0 and (node.parent_node == None or node.old_nb[1] -1 != node.nb[1]):
-            lst.append((node.old_nb[0], node.old_nb[1] - 1))
+        if node.dest[0] + 1 <= self.dim - 1 and (node.parent_node == None or node.dest[0] + 1 != node.dest[0]):
+            lst.append((node.dest[0] + 1, node.dest[1]))
+        if node.dest[0] - 1 >= 0 and (node.parent_node == None or node.dest[0] -1 != node.dest[0]):
+            lst.append((node.dest[0] - 1, node.dest[1]))
+        if node.dest[1] + 1 <= self.dim - 1 and (node.parent_node == None or node.dest[1] + 1 != node.dest[1]):
+            lst.append((node.dest[0], node.dest[1] + 1))
+        if node.dest[1] - 1 >= 0 and (node.parent_node == None or node.dest[1] -1 != node.dest[1]):
+            lst.append((node.dest[0], node.dest[1] - 1))
         # print("lst des nouvelles entrees dans open", lst)
         return lst
 
@@ -43,28 +43,28 @@ class algorithme:
             tmp = node(puzzle, parent_node.current_state, parent_node, coord, self.heuristic)
 
             for elem in self.opened:
-                # if np.array_equal(elem.current_state, tmp.current_state):
                 if elem.hash == tmp.hash:
                     if elem.cost_value < tmp.cost_value:
                         flag = 0
+                        break
                     else:
                         self.opened.remove(elem)
                         flag = 1
+                        break
 
             if flag != 1 and len(self.closed) > 0:
                 for elem in self.closed:
-                    # if np.array_equal(elem.current_state, tmp.current_state):
                     if elem.hash == tmp.hash:
                         flag = 0 
                         if elem.cost_value > tmp.cost_value:
                             temp_chaine = elem.zero_moves
                             self.closed.remove(elem)
-                            for element in self.opened:
-                                if element.zero_moves[:len(temp_chaine)] == temp_chaine:
-                                    # print("chaine dans opened : ", element.zero_moves, "\nchaine de ce qu'on a enlevé dans close : ", temp_chaine, "\nchaine du noeud ajouté : ", tmp.zero_moves)
-                                    self.opened.remove(element)
-                                    # del element
-                            # print("le cas casse couille arrive, il faut dont surement supprimer tout les enfants de l elem qui sont dans open - WARNING (dans algo.py fonction to_opened)")
+                            i = 0
+                            while i < len(self.opened):
+                                if self.opened[i].zero_moves[:len(temp_chaine)] == temp_chaine:
+                                    del self.opened[i]
+                                    i -= 1
+                                i += 1
             
             i = 1 # pour pas virer self.open[0]
             while i < len(self.opened) and tmp.cost_value > self.opened[i].cost_value: # a mettre ad on parcours la liste
@@ -96,7 +96,7 @@ class algorithme:
             self.max_nb_state = len(self.opened) if self.max_nb_state < len(self.opened) else self.max_nb_state
         return self.closed[-1].zero_moves
 
-    def algo(self, puzzle): # 1 itération du while = un placement de chiffre a la bonne place ( ex : le 1 en haut a gauche)
+    def algo(self, puzzle):
         self.path = self.a_star(puzzle)
         puzzle.end_time = time.time()
         self.resolve_time = puzzle.end_time - puzzle.start_time

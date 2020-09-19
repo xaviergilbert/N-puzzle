@@ -102,10 +102,10 @@ def main():
     ask_algo_compromise(mon_puzzle)
     ask_time_limit(mon_puzzle)
     mon_puzzle.start_time = time.time()
-    algo = algorithme(mon_puzzle, heuristic) #heuristic a changer
+    algo = algorithme(mon_puzzle, heuristic)
     mon_puzzle.end_time = time.time()
-    ft_verif(mon_puzzle.start, mon_puzzle.target, algo.path)
     print_info(algo, )
+    ft_verif(mon_puzzle.start, mon_puzzle.target, algo.path)
     exit(0)
 
 if __name__ == "__main__":

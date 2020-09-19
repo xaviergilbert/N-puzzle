@@ -8,38 +8,31 @@ def format_where(ret):
     return (ret[0][0], ret[1][0])
 
 class node:
-    def __init__(self, puzzle, current_state, parent_node, nb, heuristic):
+    def __init__(self, puzzle, current_state, parent_node, dest, heuristic):
         self.heuristic = heuristic
-        self.old_nb = copy.copy(nb)
-        self.nb = nb
+        self.dest = dest
         self.parent_node = parent_node
         if parent_node == None:
             self.zero_moves = ""
             self.current_state = current_state
         else:
             self.zero_moves = copy.copy(parent_node.zero_moves)
-            self.current_state = self.moving_nb_to_dest(format_where(np.where(parent_node.current_state == 0)), parent_node.current_state, self.nb)
+            self.current_state = self.moving_nb_to_dest(format_where(np.where(current_state == 0)), current_state, self.dest)
         self.hash = self.current_state.tobytes()
         self.cost_value = self.calcul_heuristic(self.current_state, puzzle)
 
     def moving_nb_to_dest(self, pos_zero, old_current_state, dest):
         tmp = copy.copy(old_current_state)
+        tmp[dest], tmp[pos_zero] = tmp[pos_zero], tmp[dest]
         if pos_zero[0] > dest[0]:
-            tmp = move_top(tmp, pos_zero)
             self.zero_moves += "t"
         elif pos_zero[0] < dest[0]:
-            tmp = move_bottom(tmp, pos_zero)
             self.zero_moves += "d"
         elif pos_zero[1] < dest[1]:
-            tmp = move_right(tmp, pos_zero)
             self.zero_moves += "r"
         elif pos_zero[1] > dest[1]:
-            tmp = move_left(tmp, pos_zero)
             self.zero_moves += "l"
-        self.nb = pos_zero
         return tmp
-
-
 
     def calcul_heuristic(self, current, puzzle):
         """ Calculate the cost of a path choice base on heuristique and number of moves already done """
