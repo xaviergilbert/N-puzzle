@@ -7,7 +7,7 @@ from src.moves import *
 def format_where(ret):
     return (ret[0][0], ret[1][0])
 
-class node:
+class node:  
     def __init__(self, puzzle, current_state, parent_node, dest, heuristic):
         self.heuristic = heuristic
         self.dest = dest
@@ -34,31 +34,27 @@ class node:
             self.zero_moves += "l"
         return tmp
 
-    def calcul_heuristic(self, current, puzzle):
+    def calcul_heuristic(self, object current, puzzle):
         """ Calculate the cost of a path choice base on heuristique and number of moves already done """
-        final = puzzle.target
+        cpdef object final = puzzle.target
+        cpdef int i, j
+        cpdef int dist = 0
+        cpdef int corner = 0
+        cpdef int misplaced_tiles = 0
+        cpdef object tmp1
+
         # print(puzzle.weight_heuristique, puzzle.weight_djikstra)
         if self.heuristic == "euclide": 
             """" Distance d’Euclide : La distance d’Euclide est égale à la racine carré de la somme des
                 distances au carré entre chaque pion et sa position finale. 
             """
-            dist = 0
-            # for nb in np.nditer(current):
-            #     tmp1, tmp2 = format_where(np.where(final == nb)) , format_where(np.where(current == nb))
-            #     dist += ((abs(tmp1[0] - tmp2[0]) + abs(tmp1[1] - tmp2[1])) ** 2)
             for i, j in zip(*np.where(current >= 0)):
                 tmp1 = format_where(np.where(final == current[(i, j)]))
                 dist += ((abs(tmp1[0] - i) + abs(tmp1[1] - j)) ** 2)
             euclide = math.sqrt(dist)
-            # print("euclide : ", euclide + len(self.zero_moves))
             return euclide * puzzle.weight_heuristique + len(self.zero_moves) * puzzle.weight_djikstra
 
         elif self.heuristic == "misplaced_tiles":
-            misplaced_tiles = 0
-            # for nb in np.nditer(current):
-            #     tmp1, tmp2 = format_where(np.where(final == nb)) , format_where(np.where(current == nb))
-            #     if tmp1[0] != tmp2[0] or tmp1[1] != tmp2[1]:
-            #         misplaced_tiles += 1
             for i, j in zip(*np.where(current >= 0)):
                 tmp1 = format_where(np.where(final == current[(i, j)]))
                 if tmp1[0] != i or tmp1[1] != j:
@@ -66,18 +62,12 @@ class node:
             return misplaced_tiles * puzzle.weight_heuristique + len(self.zero_moves) * puzzle.weight_djikstra
 
         elif self.heuristic == "manhattan":
-            dist = 0
-            # for nb in np.nditer(current):
-            #     tmp1, tmp2 = format_where(np.where(final == nb)) , format_where(np.where(current == nb))
-            #     dist += abs(tmp1[0] - tmp2[0]) + abs(tmp1[1] - tmp2[1])
             for i, j in zip(*np.where(current >= 0)):
                 tmp1 = format_where(np.where(final == current[(i, j)]))
                 dist += ((abs(tmp1[0] - i) + abs(tmp1[1] - j)))
             return dist * puzzle.weight_heuristique + len(self.zero_moves) * puzzle.weight_djikstra
 
         elif self.heuristic == "corner_tiles":
-            dist = 0
-            corner = 0
             for i, j in zip(*np.where(current >= 0)):
                 tmp1 = format_where(np.where(final == current[(i, j)]))
                 dist += ((abs(tmp1[0] - i) + abs(tmp1[1] - j)))

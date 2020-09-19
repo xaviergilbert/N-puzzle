@@ -32,53 +32,70 @@ class algorithme:
         # print("lst des nouvelles entrees dans open", lst)
         return lst
 
-    def to_opened(self, puzzle, lst_coord_new_node, parent_node):
+    def to_opened(self, object puzzle, list lst_coord_new_node, object parent_node):
         """ Create new nodes
             Check if they already exist in opened and closed list
             Insert them in opened list sorted by heuristic cost
         """
+        cdef int i
+        cdef int j
+        cdef lopen = len(self.opened)
+        cdef lclosed = len(self.closed)
+
         final_state = puzzle.target
         for coord in lst_coord_new_node: # NE PAS RENTRER TOUT LES NODES ? + TRIER
             flag = 2
             tmp = node(puzzle, parent_node.current_state, parent_node, coord, self.heuristic)
 
-            for elem in self.opened:
-                if elem.hash == tmp.hash:
-                    if elem.cost_value < tmp.cost_value:
+            i = 0
+
+            while i < lopen:
+                if self.opened[i].hash == tmp.hash:
+                    if self.opened[i].cost_value < tmp.cost_value:
                         flag = 0
                         break
                     else:
-                        self.opened.remove(elem)
+                        del self.opened[i]
+                        lopen -= 1
+                        i -=1
                         flag = 1
                         break
+                i += 1
 
-            if flag != 1 and len(self.closed) > 0:
-                for elem in self.closed:
-                    if elem.hash == tmp.hash:
+            if flag == 2 and lclosed > 0:
+                i = 0
+                while i < lclosed:
+                    if self.closed[i].hash == tmp.hash:
                         flag = 0 
-                        if elem.cost_value > tmp.cost_value:
-                            temp_chaine = elem.zero_moves
-                            self.closed.remove(elem)
-                            i = 0
-                            while i < len(self.opened):
-                                if self.opened[i].zero_moves[:len(temp_chaine)] == temp_chaine:
-                                    del self.opened[i]
-                                    i -= 1
-                                i += 1
+                        if self.closed[i].cost_value > tmp.cost_value:
+                            temp_chaine = self.closed[i].zero_moves
+                            del self.closed[i]
+                            lclosed -= 1
+                            i -= 1
+                            j = 0
+                            while j < lopen:
+                                if self.opened[j].zero_moves[:len(temp_chaine)] == temp_chaine:
+                                    del self.opened[j]
+                                    lopen -= 1
+                                    j -= 1
+                                j += 1
+                    i += 1
             
-            i = 1 # pour pas virer self.open[0]
+            i = 1
             while i < len(self.opened) and tmp.cost_value > self.opened[i].cost_value: # a mettre ad on parcours la liste
                 i += 1
 
             if flag > 0:
                 self.opened.insert(i, tmp)
+                lopen += 1 
                 self.nb_states += 1
 
     def a_star(self, puzzle):
+        cdef int i = 0
+        
         self.opened = [node(puzzle, puzzle.start, None, format_where(np.where(puzzle.start == 0)), self.heuristic)] 
         self.closed = []
 
-        i = 0
         while (len(self.closed) == 0 or self.closed[-1].hash != puzzle.hash):
             if int(time.time() - puzzle.start_time) / 5 == i:
                 if i >= puzzle.time_limit / 5:
