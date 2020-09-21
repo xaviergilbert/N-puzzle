@@ -20,4 +20,5 @@ Les heuristiques utilisées dans ce projets sont :
 - Corner tiles heuristique
 
 ## Usage
+make
 ./python exec.py [file]

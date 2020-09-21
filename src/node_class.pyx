@@ -21,6 +21,13 @@ class node:
         self.hash = self.current_state.tobytes()
         self.cost_value = self.calcul_heuristic(self.current_state, puzzle)
 
+    def __eq__(self, other):
+        """Compare only if state (1D numpy array) is equal to other."""
+        return np.array_equal(self.current_state, other)
+
+    def __lt__(self, other):
+        return self.cost_value < other.cost_value
+
     def moving_nb_to_dest(self, pos_zero, old_current_state, dest):
         tmp = copy.copy(old_current_state)
         tmp[dest], tmp[pos_zero] = tmp[pos_zero], tmp[dest]
@@ -34,7 +41,7 @@ class node:
             self.zero_moves += "l"
         return tmp
 
-    def calcul_heuristic(self, object current, puzzle):
+    def calcul_heuristic(self, current, puzzle):
         """ Calculate the cost of a path choice base on heuristique and number of moves already done """
         cpdef object final = puzzle.target
         cpdef int i, j
