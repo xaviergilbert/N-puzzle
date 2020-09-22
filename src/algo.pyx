@@ -39,21 +39,18 @@ class algorithme:
             Insert them in opened list sorted by heuristic cost
         """
         cdef int i
+        cdef int flag = 2
         cdef lopen = len(self.opened)
         cdef lclose = len(self.closed)
 
-        final_state = puzzle.target
         for coord in lst_coord_new_node: # NE PAS RENTRER TOUT LES NODES ? + TRIER
-            flag = 2
             tmp = node(puzzle, parent_node.current_state, parent_node, coord, self.heuristic)
 
             if tmp.hash in self.closed_hash:
                 continue
             
             i = 0
-            # tmp.cost_value = tmp.calcul_heuristic(tmp.current_state, puzzle)
-            if tmp.hash in self.opened_hash and flag != 0:
-                # continue
+            if tmp.hash in self.opened_hash:
                 while i < lopen:
                     if self.opened[i].hash == tmp.hash:
                         if self.opened[i].cost_value <= tmp.cost_value:
@@ -82,8 +79,7 @@ class algorithme:
         
         # self.open = []
         self.opened = [node(puzzle, puzzle.start, None, format_where(np.where(puzzle.start == 0)), self.heuristic)]
-        self.opened[0].cost_value = self.opened[0].calcul_heuristic(puzzle.start, puzzle)
-        print("Cost value de depart : ", self.opened[0].cost_value / puzzle.weight_heuristique)
+        # print("Cost value de depart : ", self.opened[0].cost_value / puzzle.weight_heuristique)
         self.closed = []
         self.closed_hash = []
         self.opened_hash = [copy.copy(self.opened[0].hash)]
