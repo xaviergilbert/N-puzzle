@@ -5,7 +5,7 @@ import numpy as np
 import copy
 import time
 import timeit
-from src.node_class import node, format_where
+from src.node_class import Node, format_where
 
 
 class algorithme:
@@ -29,22 +29,17 @@ class algorithme:
             lst.append((node.dest[0], node.dest[1] + 1))
         if node.dest[1] - 1 >= 0 and (node.parent_node == None or node.dest[1] -1 != node.parent_node.dest[1]):
             lst.append((node.dest[0], node.dest[1] - 1))
-        # print("lst des nouvelles entrees dans open", lst)
         return lst
 
 
-    def to_opened(self, object puzzle, list lst_coord_new_node, object parent_node):
+    def to_opened(self, puzzle, lst_coord_new_node, parent_node):
         """ Create new nodes
             Check if they already exist in opened and closed list
             Insert them in opened list sorted by heuristic cost
         """
 
         for coord in lst_coord_new_node:
-            self.creation_noeuf_temps = time.time()
-            tmp = node(puzzle, parent_node.current_state, parent_node, coord, self.heuristic)
-            self.creation_noeuf_temps = time.time() - self.creation_noeuf_temps
-            # print("Temps creation noeud : ", self.creation_noeuf_temps * 1000)
-            # time.sleep(1)
+            tmp = Node(puzzle, parent_node.current_state, parent_node, coord, self.heuristic)
 
             if tmp.hash in self.closed_hash:
                 if self.closed_hash[tmp.hash].cost_value <= tmp.cost_value:
@@ -60,15 +55,15 @@ class algorithme:
 
 
     def a_star(self, puzzle):
-        cdef int i = 0
         self.opened = []
         self.opened_hash = {}
         self.closed_hash = {}
 
-        start_node = node(puzzle, puzzle.start, None, format_where(np.where(puzzle.start == 0)), self.heuristic)
+        start_node = Node(puzzle, puzzle.start, None, format_where(np.where(puzzle.start == 0)), self.heuristic)
         heappush(self.opened, start_node)
         self.opened_hash[start_node.hash] = start_node
 
+        i = 0
         while self.opened:
             self.temps_boucle = time.time()
             if int(time.time() - puzzle.start_time) / 5 == i:
@@ -89,9 +84,6 @@ class algorithme:
 
             self.closed_hash[current.hash] = current
             self.max_nb_state = len(self.opened) if self.max_nb_state < len(self.opened) else self.max_nb_state
-            self.temps_boucle = time.time() - self.temps_boucle
-            # print("temps boucle final: \n", self.temps_boucle * 1000)
-            # time.sleep(1)
         return self.closed_hash[current.hash]
 
 

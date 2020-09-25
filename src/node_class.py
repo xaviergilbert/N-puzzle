@@ -2,27 +2,23 @@ import copy
 import numpy as np
 import math
 import time
-from src.moves import *
 
 def format_where(ret):
     return (ret[0][0], ret[1][0])
 
-class node:  
+class Node:  
     def __init__(self, puzzle, current_state, parent_node, dest, heuristic):
         self.heuristic = heuristic
         self.dest = dest
         self.parent_node = parent_node
         if parent_node == None:
             self.zero_moves = ""
-            # self.conflict = []
             self.current_state = current_state
         else:
             self.zero_moves = copy.copy(parent_node.zero_moves)
             self.current_state = self.moving_nb_to_dest(self.parent_node.dest, current_state, self.dest)
-            # self.conflict = self.parent_node.conflict
         self.hash = self.current_state.tobytes()
         self.h = 0
-        # self.corner = 0
         self.cost_value = self.calcul_heuristic(self.current_state, puzzle)
 
 
@@ -46,12 +42,7 @@ class node:
 
     def calcul_heuristic(self, current, puzzle):
         """ Calculate the cost of a path choice base on heuristique and number of moves already done """
-        cpdef object final = puzzle.target
-        cpdef int i, j
-        cpdef object tmp
-        # final = puzzle.target
-
-        # print(puzzle.weight_heuristique, puzzle.weight_djikstra)
+        final = puzzle.target
 
         def check_conflict_line(current, y):
             xi = 0
@@ -173,4 +164,4 @@ class node:
                     check_conflict_line(current, i) 
                     if self.conflict[i] == self.parent_node.conflict[i]:
                         check_conflict_line(current, self.dest[0])
-            return (self.h + np.sum(self.conflict)) * puzzle.weight_heuristique + len(self.zero_moves)  * puzzle.weight_djikstra
+            return (self.h + np.sum(self.conflict) * 4) * puzzle.weight_heuristique + len(self.zero_moves)  * puzzle.weight_djikstra

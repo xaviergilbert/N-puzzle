@@ -5,8 +5,8 @@ from src.parsing import parsing
 from src.puzzle_class import puzzle
 from src.check_solvable import check_solvable
 from src.algo import algorithme
-from src.node_class import node, format_where
 from src.moves import *
+from src.node_class import format_where
 
 
 def ask_heuristic():
@@ -59,7 +59,6 @@ def ask_time_limit(puzzle):
 
 def print_info(algo):
     """ Print information about puzzle solving """
-    # print etats etape par etape
    
     tmp = algo.last_object
 
@@ -70,7 +69,6 @@ def print_info(algo):
         tmp = tmp.parent_node
         i += 1
 
-    # print other info 
     print("Etat \n", tmp.current_state, "\n")
     print("Number of moves : ", len(algo.last_object.zero_moves))
     print("Complexity in time : ", algo.nb_states)

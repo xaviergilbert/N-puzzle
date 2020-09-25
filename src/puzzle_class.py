@@ -62,10 +62,3 @@ class puzzle:
     
     def hash_target(self):
         self.hash = self.target.tobytes()        
-
-
-def main():
-    mon_puzzle = puzzle(4)
-
-if __name__ == "__main__":
-    main()
