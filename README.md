@@ -22,5 +22,4 @@ Les heuristiques utilisées dans ce projets sont :
 - Linear conflict
 
 ## Usage
-make
 ./python exec.py [file]
