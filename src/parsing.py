@@ -23,7 +23,7 @@ def check_pars_error(tab_string):
                 exit()
 
 def insert_int_tab(tab_string):
-    i = 1 # pass dimension
+    i = 1 
     final_tab = []
     while i < len(tab_string):
         tab_string[i] = tab_string[i].split(' ')

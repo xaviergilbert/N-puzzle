@@ -5,8 +5,8 @@ from src.parsing import parsing
 from src.puzzle_class import puzzle
 from src.check_solvable import check_solvable
 from src.algo import algorithme
-from src.node_class import node, format_where
 from src.moves import *
+from src.node_class import format_where
 
 
 def ask_heuristic():
@@ -16,6 +16,7 @@ def ask_heuristic():
     print("2 : Misplaced tiles")
     print("3 : Euclide heuristic")
     print("4 : Corner tiles heuristic")
+    print("5 : Linear conflict")
     choice = input("Your choice : ")
     if choice == "2":
         return "misplaced_tiles"
@@ -23,6 +24,8 @@ def ask_heuristic():
         return "euclide"
     elif choice == "4":
         return "corner_tiles"
+    elif choice == "5":
+        return "linear_conflict"
     else:
         return "manhattan"
 
@@ -56,20 +59,20 @@ def ask_time_limit(puzzle):
 
 def print_info(algo):
     """ Print information about puzzle solving """
-    # print etats etape par etape
-    tmp = algo.closed[-1]
+   
+    tmp = algo.last_object
+
     i = 0
     while tmp.parent_node != None:
-        state_number = len(algo.path) - i
+        state_number = len(algo.last_object.zero_moves) - i
         print("Etat ", state_number, "\n", tmp.current_state, "\n")
         tmp = tmp.parent_node
         i += 1
 
-    # print other info 
     print("Etat \n", tmp.current_state, "\n")
+    print("Number of moves : ", len(algo.last_object.zero_moves))
     print("Complexity in time : ", algo.nb_states)
     print("Complexity in space : ", algo.max_nb_state)
-    print("Number of moves : ", len(algo.path))
     print("Time to resolve :", str(algo.resolve_time)[:5], "seconds")
 
 def ft_verif(base, target, string):
@@ -86,7 +89,7 @@ def ft_verif(base, target, string):
     if np.array_equal(base, target):
         print("Check done - Path correct")
     else:
-        print("Check done - Path Incorerrect")
+        print("Check done - Path Incorrect")
 
 def main():
     value_list = parsing()
@@ -104,8 +107,8 @@ def main():
     mon_puzzle.start_time = time.time()
     algo = algorithme(mon_puzzle, heuristic)
     mon_puzzle.end_time = time.time()
-    print_info(algo, )
-    ft_verif(mon_puzzle.start, mon_puzzle.target, algo.path)
+    print_info(algo)
+    ft_verif(mon_puzzle.start, mon_puzzle.target, algo.last_object.zero_moves)
     exit(0)
 
 if __name__ == "__main__":

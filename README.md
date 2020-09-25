@@ -19,5 +19,7 @@ Les heuristiques utilisées dans ce projets sont :
 
 - Corner tiles heuristique
 
+- Linear conflict
+
 ## Usage
 ./python exec.py [file]
