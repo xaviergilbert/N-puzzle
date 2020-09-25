@@ -8,3 +8,4 @@ mv_files:
 
 clean:
 	rm src/*.c
+	rm -rf build
