@@ -22,4 +22,6 @@ Les heuristiques utilisées dans ce projets sont :
 - Linear conflict
 
 ## Usage
-./python exec.py [file]
+source my_env/bin/activate pour activer l'espace de travail sur linux/mac
+
+./python exec.py [-h] file / ./exec.py [-h] file

@@ -1,3 +1,5 @@
+#!/usr/bin/env python 
+
 from src.npuzzle import *
 import time
 import copy

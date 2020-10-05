@@ -44,8 +44,8 @@ def check_int_puzzle_error(tab_int):
         print(Fore.RED, "ERROR in file :", sys.argv[1], ", bad value for puzzle")
         exit()
 
-def parsing():
-    open_file= open(sys.argv[1], 'r')
+def parsing(file):
+    open_file = file
     string = open_file.read()
     string_line = string.split("\n")
     clean_comment = clean_comments(string_line)
@@ -53,9 +53,3 @@ def parsing():
     final_tab = insert_int_tab(clean_comment)
     check_int_puzzle_error(final_tab)
     return (final_tab)
-
-def main():
-    parsing()
-
-if __name__ == "__main__":
-    main()

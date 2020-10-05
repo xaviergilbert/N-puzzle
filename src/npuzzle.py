@@ -1,5 +1,7 @@
+import os
 import time
 import math
+import argparse
 import numpy as np
 from src.parsing import parsing
 from src.puzzle_class import puzzle
@@ -92,7 +94,22 @@ def ft_verif(base, target, string):
         print("Check done - Path Incorrect")
 
 def main():
-    value_list = parsing()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="puzzle file")
+    args = parser.parse_args()
+    file_name = args.file
+
+    try:
+        file = open(file_name, 'r')
+        statinfo = os.stat(file_name)
+        if statinfo.st_size > 1000:
+            raise Exception(": file too big")
+        value_list = parsing(file)
+    except Exception as e:
+        print("Erreur lors du traitement du fichier", e)
+        exit()
+
     dimension = int(math.sqrt(len(value_list)))
     mon_puzzle = puzzle(value_list, dimension)
     mon_puzzle.create_target_puzzle(dimension)
@@ -109,7 +126,7 @@ def main():
     mon_puzzle.end_time = time.time()
     print_info(algo)
     ft_verif(mon_puzzle.start, mon_puzzle.target, algo.last_object.zero_moves)
-    exit(0)
+    exit()
 
 if __name__ == "__main__":
     main()
