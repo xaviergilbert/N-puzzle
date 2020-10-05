@@ -13,7 +13,7 @@ def clean_comments(tab):
     return (clean_tab)
 
 def check_pars_error(tab_string):
-    if tab_string[0].find(' ') == 1 or len(tab_string[0]) == 0:
+    if len(tab_string[0]) == 0:
         print(Fore.RED, "ERROR in file :", sys.argv[1], "of puzzle dimension :", tab_string[0])
         exit()
     for args in tab_string:
@@ -50,6 +50,7 @@ def parsing(file):
     string_line = string.split("\n")
     clean_comment = clean_comments(string_line)
     check_pars_error(clean_comment)
+    clean_comment = [i for i in clean_comment if not i.isspace()]
     final_tab = insert_int_tab(clean_comment)
     check_int_puzzle_error(final_tab)
     return (final_tab)

@@ -103,11 +103,11 @@ def main():
     try:
         file = open(file_name, 'r')
         statinfo = os.stat(file_name)
-        if statinfo.st_size > 1000:
-            raise Exception(": file too big")
+        if statinfo.st_size > 1000 or statinfo.st_size == 0:
+            raise Exception(": file size isn't appropriate")
         value_list = parsing(file)
     except Exception as e:
-        print("Erreur lors du traitement du fichier", e)
+        print("Error during file processing", e)
         exit()
 
     dimension = int(math.sqrt(len(value_list)))
