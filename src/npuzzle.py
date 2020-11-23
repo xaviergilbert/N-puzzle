@@ -11,7 +11,7 @@ from src.moves import *
 from src.node_class import format_where
 
 
-def ask_heuristic():
+def ask_heuristic(puzzle):
     """ Allow to select the user chosen heuristic with his input """
     print("\nChoose an heuristic :")
     print("1 : Manhattan heuristic")
@@ -21,15 +21,15 @@ def ask_heuristic():
     print("5 : Linear conflict")
     choice = input("Your choice : ")
     if choice == "2":
-        return "misplaced_tiles"
+        puzzle.heuristic = "misplaced_tiles"
     elif choice == "3":
-        return "euclide"
+        puzzle.heuristic = "euclide"
     elif choice == "4":
-        return "corner_tiles"
+        puzzle.heuristic = "corner_tiles"
     elif choice == "5":
-        return "linear_conflict"
+        puzzle.heuristic = "linear_conflict"
     else:
-        return "manhattan"
+        puzzle.heuristic = "manhattan"
 
 def ask_algo_compromise(puzzle):
     """ Allow the user to choose a compromise optimum / speed """
@@ -65,28 +65,30 @@ def print_info(algo):
     tmp = algo.last_object
 
     i = 0
+    length = len(str(algo.last_object.zero_moves))
     while tmp.parent_node != None:
-        state_number = len(algo.last_object.zero_moves) - i
+        state_number = length - i
         print("Etat ", state_number, "\n", tmp.current_state, "\n")
         tmp = tmp.parent_node
         i += 1
 
     print("Etat \n", tmp.current_state, "\n")
-    print("Number of moves : ", len(algo.last_object.zero_moves))
+    print("Number of moves : ", length)
     print("Complexity in time : ", algo.nb_states)
     print("Complexity in space : ", algo.max_nb_state)
     print("Time to resolve :", str(algo.resolve_time)[:5], "seconds")
 
 def ft_verif(base, target, string):
     """ Function which check if the initial puzzle leads to final puzzle move by move"""
+    string = str(string)
     for c in string:
-        if c == 't':
+        if c == '1':
             base = move_top(base, format_where(np.where(base == 0)))
-        if c == 'd':
+        if c == '2':
             base = move_bottom(base, format_where(np.where(base == 0)))
-        if c == 'r':
+        if c == '3':
             base = move_right(base, format_where(np.where(base == 0))) 
-        if c == 'l':
+        if c == '4':
             base = move_left(base, format_where(np.where(base == 0)))
     if np.array_equal(base, target):
         print("Check done - Path correct")
@@ -118,11 +120,11 @@ def main():
     check_solvable(mon_puzzle, value_list)
     print("\npuzzle target : \n", mon_puzzle.target)
     print("\npuzzle start : \n", mon_puzzle.start)
-    heuristic = ask_heuristic()
+    ask_heuristic(mon_puzzle)
     ask_algo_compromise(mon_puzzle)
     ask_time_limit(mon_puzzle)
     mon_puzzle.start_time = time.time()
-    algo = algorithme(mon_puzzle, heuristic)
+    algo = algorithme(mon_puzzle)
     mon_puzzle.end_time = time.time()
     print_info(algo)
     ft_verif(mon_puzzle.start, mon_puzzle.target, algo.last_object.zero_moves)
